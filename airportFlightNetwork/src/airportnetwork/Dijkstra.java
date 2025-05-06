@@ -21,15 +21,21 @@ public class Dijkstra {
             Airport currentAirport = current.key;
 
             for (Flight flight : graph.getNeighbours(currentAirport)) {
+                Airport dest = flight.getDestination();
                 double newDist = distances.get(currentAirport) + flight.getWeight();
-                if (newDist < distances.get(flight.getDestination())) {
-                    distances.put(flight.getDestination(), newDist);
-                    previous.put(flight.getDestination(), currentAirport);
-                    minHeap.decreaseKey(flight.getDestination(), newDist);
+
+                if (newDist < distances.get(dest)) {
+                    distances.put(dest, newDist);
+                    previous.put(dest, currentAirport);
+                    if (minHeap.contains(dest)) {
+                        minHeap.decreaseKey(dest, newDist);
+                    } else {
+                        minHeap.insert(dest, newDist);
+                    }
                 }
             }
         }
 
-        return distances; // or return previous for path tracing
+        return distances; // or return previous to trace paths
     }
 }
