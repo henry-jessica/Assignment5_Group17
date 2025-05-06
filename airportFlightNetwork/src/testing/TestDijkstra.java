@@ -24,11 +24,11 @@ public class TestDijkstra {
         graph.addEdge(dub, ber, 700); // DUB -> BER (direct but longer)
 
         // 4. Run A* pathfinding
-        Map<Airport, Double> path = Dijkstra.computeShortestPath(graph, dub);
+        Map<Airport, Double> path = Dijkstra.computeShortestPath(graph, par);
 
         // 5. Print the path
         if (!path.isEmpty()) {
-            System.out.println("Shortest path from Dublin to Berlin:");
+            System.out.println("Shortest path from Dublin to other airports:");
             for (var a : path.keySet()) {
                 System.out.println(a + ", " + path.get(a));
             }
