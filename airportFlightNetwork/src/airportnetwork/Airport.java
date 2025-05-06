@@ -9,16 +9,22 @@ public class Airport {
         this.name = name;
     }
 
-    public String getCode() { return code; }
+    public String getCode() {
+        return code;
+    }
 
     // hashCode and equals overridden for HashMap/Set usage
     @Override
-    public int hashCode() { return code.hashCode(); }
+    public int hashCode() {
+        return code.hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Airport)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Airport))
+            return false;
         Airport other = (Airport) o;
         return this.code.equals(other.code);
     }

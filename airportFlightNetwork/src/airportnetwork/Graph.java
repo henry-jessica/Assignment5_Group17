@@ -1,28 +1,43 @@
 package airportnetwork;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+public interface Graph<V, E> {
+    int numVertices(); // number of vertices
 
-public class Graph<T> {
-    private final Map<T, List<Flight>> adjacencyList = new HashMap<>();
+    Iterable<Vertex<V>> vertices(); // iterable collection of vertices
 
-    public void addNode(T node) {
-        adjacencyList.putIfAbsent(node, new ArrayList<>());
+    int numEdges(); // number of edges
+
+    Iterable<Edge<E>> edges(); // iterable collection of edges
+
+    Edge<E> getEdge(Vertex<V> u, Vertex<V> v); // edge between two vertices (if any)
+
+    Vertex<V>[] endVertices(Edge<E> e); // endpoints of edge
+
+    Vertex<V> opposite(Vertex<V> v, Edge<E> e); // opposite vertex on edge
+
+    int outDegree(Vertex<V> v); // number of outgoing edges
+
+    int inDegree(Vertex<V> v); // number of incoming edges
+
+    Iterable<Edge<E>> outgoingEdges(Vertex<V> v); // outgoing edges
+
+    Iterable<Edge<E>> incomingEdges(Vertex<V> v); // incoming edges
+
+    // Update methods
+    Vertex<V> insertVertex(V element); // insert new vertex
+
+    Edge<E> insertEdge(Vertex<V> u, Vertex<V> v, E element); // insert new edge
+
+    void removeVertex(Vertex<V> v); // remove a vertex and incident edges
+
+    void removeEdge(Edge<E> e); // remove an edge
+
+    // Nested interfaces for Vertex and Edge
+    interface Vertex<V> {
+        V getElement();
     }
 
-    public void addEdge(T source, T destination, double weight) {
-        adjacencyList.get(source).add(new Flight((Airport) source, (Airport) destination, weight));
-    }
-
-    public List<Flight> getNeighbours(T node) {
-        return adjacencyList.get(node);
-    }
-
-    public Set<T> getAllNodes() {
-        return adjacencyList.keySet();
+    interface Edge<E> {
+        E getElement();
     }
 }
-

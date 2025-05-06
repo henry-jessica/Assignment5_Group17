@@ -1,7 +1,6 @@
 package testing;
 
 import airportnetwork.*;
-
 import java.util.*;
 import java.util.function.Function;
 
@@ -14,22 +13,22 @@ public class TestAStar {
         Airport ber = new Airport("BER", "Berlin");
 
         // 2. Create and populate the graph
-        Graph<Airport> graph = new Graph<>();
-        graph.addNode(dub);
-        graph.addNode(lon);
-        graph.addNode(par);
-        graph.addNode(ber);
+        Graph<Airport, Double> graph = new AdjacencyListGraph<>();
+        Graph.Vertex<Airport> dubVert = graph.insertVertex(dub);
+        Graph.Vertex<Airport> lonVert = graph.insertVertex(lon);
+        Graph.Vertex<Airport> parVert = graph.insertVertex(par);
+        Graph.Vertex<Airport> berVert = graph.insertVertex(ber);
 
-        graph.addEdge(dub, lon, 100);  // DUB -> LON
-        graph.addEdge(lon, par, 200);  // LON -> PAR
-        graph.addEdge(par, ber, 300);  // PAR -> BER
-        graph.addEdge(dub, ber, 700);  // DUB -> BER (direct but longer)
+        graph.insertEdge(dubVert, lonVert, 100.0); // DUB -> LON
+        graph.insertEdge(lonVert, parVert, 200.0); // LON -> PAR
+        graph.insertEdge(parVert, berVert, 300.0); // PAR -> BER
+        graph.insertEdge(dubVert, berVert, 700.0); // DUB -> BER (direct but longer)
 
         // 3. Dummy heuristic (acts like Dijkstra)
         Function<Airport, Double> heuristic = airport -> 0.0;
 
         // 4. Run A* pathfinding
-        List<Airport> path = AStar.findPath(graph, dub, ber, heuristic);
+        List<Airport> path = AStar.findPath(graph, dubVert, berVert, heuristic);
 
         // 5. Print the path
         if (!path.isEmpty()) {

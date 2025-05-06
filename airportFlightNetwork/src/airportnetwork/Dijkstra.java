@@ -4,32 +4,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Dijkstra {
-    public static Map<Airport, Double> computeShortestPath(Graph<Airport> graph, Airport start) {
-        Map<Airport, Double> distances = new HashMap<>();
-        Map<Airport, Airport> previous = new HashMap<>();
-        MiniHeap<Airport> minHeap = new MiniHeap<>();
+    public static Map<Graph.Vertex<Airport>, Double> computeShortestPath(Graph<Airport, Double> graph,
+            Graph.Vertex<Airport> start) {
+        Map<Graph.Vertex<Airport>, Double> distances = new HashMap<>();
+        Map<Graph.Vertex<Airport>, Graph.Vertex<Airport>> previous = new HashMap<>();
+        MiniHeap<Graph.Vertex<Airport>> minHeap = new MiniHeap<>();
 
-        for (Airport airport : graph.getAllNodes()) {
-            distances.put(airport, Double.POSITIVE_INFINITY);
+        for (Graph.Vertex<Airport> vertex : graph.vertices()) {
+            distances.put(vertex, Double.POSITIVE_INFINITY);
         }
 
         distances.put(start, 0.0);
         minHeap.insert(start, 0.0);
 
         while (!minHeap.isEmpty()) {
-            MiniHeap.Node<Airport> current = minHeap.extractMin();
-            Airport currentAirport = current.key;
+            MiniHeap.Node<Graph.Vertex<Airport>> current = minHeap.extractMin();
+            Graph.Vertex<Airport> currentVertex = current.key;
 
-            for (Flight flight : graph.getNeighbours(currentAirport)) {
-                double newDist = distances.get(currentAirport) + flight.getWeight();
-                if (newDist < distances.get(flight.getDestination())) {
-                    distances.put(flight.getDestination(), newDist);
-                    previous.put(flight.getDestination(), currentAirport);
-                    minHeap.decreaseKey(flight.getDestination(), newDist);
+            for (Graph.Edge<Double> edge : graph.outgoingEdges(currentVertex)) {
+                Graph.Vertex<Airport> neighbor = graph.opposite(currentVertex, edge);
+                double newDist = distances.get(currentVertex) + edge.getElement();
+
+                if (newDist < distances.get(neighbor)) {
+                    distances.put(neighbor, newDist);
+                    previous.put(neighbor, currentVertex);
+                    minHeap.decreaseKey(neighbor, newDist);
                 }
             }
         }
 
-        return distances; // or return previous for path tracing
+        return distances; // optionally return `previous` for path reconstruction
     }
 }
