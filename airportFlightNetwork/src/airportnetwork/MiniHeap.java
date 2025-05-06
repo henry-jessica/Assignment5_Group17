@@ -20,6 +20,10 @@ public class MiniHeap<T> {
         return heap.isEmpty();
     }
 
+    public boolean contains(T key) {
+        return indexMap.containsKey(key);
+    }
+
     public void insert(T key, double priority) {
         Node<T> node = new Node<>(key, priority);
         heap.add(node);
@@ -29,7 +33,8 @@ public class MiniHeap<T> {
     }
 
     public Node<T> extractMin() {
-        if (heap.isEmpty()) return null;
+        if (heap.isEmpty())
+            return null;
 
         Node<T> min = heap.get(0);
         Node<T> last = heap.remove(heap.size() - 1);
@@ -46,7 +51,8 @@ public class MiniHeap<T> {
 
     public void decreaseKey(T key, double newPriority) {
         Integer index = indexMap.get(key);
-        if (index == null) return;
+        if (index == null)
+            return;
 
         Node<T> node = heap.get(index);
         if (newPriority < node.priority) {
@@ -61,29 +67,28 @@ public class MiniHeap<T> {
             if (heap.get(index).priority < heap.get(parent).priority) {
                 swap(index, parent);
                 index = parent;
-            } else break;
+            } else
+                break;
         }
     }
 
     private void siftDown(int index) {
-        int left, right, smallest;
         int size = heap.size();
-
         while (true) {
-            left = 2 * index + 1;
-            right = 2 * index + 2;
-            smallest = index;
+            int left = 2 * index + 1;
+            int right = 2 * index + 2;
+            int smallest = index;
 
             if (left < size && heap.get(left).priority < heap.get(smallest).priority)
                 smallest = left;
-
             if (right < size && heap.get(right).priority < heap.get(smallest).priority)
                 smallest = right;
 
             if (smallest != index) {
                 swap(index, smallest);
                 index = smallest;
-            } else break;
+            } else
+                break;
         }
     }
 
